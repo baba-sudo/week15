@@ -1,0 +1,18 @@
+import os
+from urllib.request import urlretrieve
+from urllib.request import Request, urlopen
+import bs4
+
+s = 1
+url='https://www.sohu.com/a/286956359_301394'
+header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}
+ret = Request(url=url, headers=header)
+html = urlopen(ret)
+bs = bs4.BeautifulSoup(html, 'html.parser')
+alls = bs.find('article',{'class':{'article'}}).find_all('img')
+for all in alls:
+    links=all.attrs['src']
+    dir = os.path.abspath('D:\\pictures')
+    work_path = os.path.join(dir, str(s)+'.jpeg')
+    urlretrieve(links, work_path)
+    s +=1
