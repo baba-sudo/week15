@@ -1,0 +1,25 @@
+import os
+from urllib.request import urlretrieve
+from urllib.request import Request, urlopen
+import bs4
+
+url='http://cjc.ict.ac.cn/qwjs/No2020-01.htm'
+header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}
+ret = Request(url=url, headers=header)
+html = urlopen(ret)
+bs = bs4.BeautifulSoup(html, 'html.parser')
+
+title = bs.find_all('span', {"style": "color:#006688"})
+names=[]
+for titles in title:
+    titles = titles.get_text().encode('iso-8859-1').decode('gbk')
+    # print(titles)
+    names.append(titles)
+s = 0
+for link in bs.find_all('a'):
+    link = link.get('href')
+    # print(link)
+    dir = os.path.abspath('D:\\test')
+    work_path = os.path.join(dir,names[s]+'.pdf')
+    urlretrieve(link, work_path)
+    s += 1
